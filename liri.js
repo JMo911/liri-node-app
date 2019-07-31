@@ -9,30 +9,29 @@ var spotify = new Spotify(keys.spotify);
 
 var axios = require('axios');
 
+var term;
 // var command = process.argv[2];
 if (process.argv[3]) {
-    var term = process.argv.slice(3).join(" ");
-} else {
-    term = term;
+    term = process.argv.slice(3).join(" ");
 }
 // var term = process.argv.slice(3).join(" ");
 
+runCommands(process.argv[2], term);
+
 //COMMAND LOGIC
-function runCommands(command) {
+function runCommands(command, term) {
     
     // console.log(command);
-    command = process.argv[2];
     if (command === "concert-this") {
     concertThis(term);
     }   else if (command === "spotify-this-song") {
+        // console.log('hi im spotify');
         spotifyThis(term);
     }   else if (command === "movie-this") {
         movieThis(term);
     }   else if (command === "do-what-it-says") {
-        debugger;
         // console.log(command);
         doWhatItSays(); 
-        debugger;
         // return runCommands();
     }
 };
@@ -58,6 +57,9 @@ function concertThis(artist) {
 };
 
 function spotifyThis(song = "The Sign") {
+    song = song.replace(/"/g, '');
+
+    console.log(song);
     spotify.search({ type: 'track', query: song, limit: 10}, function(err, data) {
         if (err) {
           return console.log('Error occurred: ' + err);
@@ -68,9 +70,10 @@ function spotifyThis(song = "The Sign") {
         var artists = [];
         var links = [];
         var songNames = [];
+
         //LOOP THROUGH EACH ITEM TO FIND EMBEDDED INFO ABOUT EACH RESULTING TRACK
         songResults.forEach(function(e){         
-            if(e.name === song) {
+            if(e.name.toLowerCase() === song.toLowerCase()) {
                 songNames.push(e.name);
                 albums.push(e.album.name);
                 links.push(e.preview_url);
@@ -79,6 +82,8 @@ function spotifyThis(song = "The Sign") {
                 });
             };
         });
+
+        console.log(albums);
         for (var i = 0; i<albums.length; i++) {
             console.log("Song Name: " + songNames[i] + "\n" + "Artist: " + artists[i] + "\n" + "Album: " + albums[i] + "\n" + "Preview Link: " + links[i]  + "\n\n");
         };
@@ -119,13 +124,16 @@ function movieThis(movie = 'Mr. Nobody') {
     // * Actors in the movie.
 };
 
-function doWhatItSays (command, term) {
+function doWhatItSays () {
     fs.readFile('random.txt', 'utf8', function(error, data){
         if (error) {
             return console.log(error);
         };
         var params = data.split(",");
         command = params[0];
+        // console.log(command);
         term = params[1];
+        // console.log(term);
+        runCommands(command, term);
     });
 };

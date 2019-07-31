@@ -6,24 +6,32 @@ var moment = require('moment');
 var fs = require('file-system');
 
 var spotify = new Spotify(keys.spotify);
-// console.log(spotify);
 
 var axios = require('axios');
 
-var command = process.argv[2];
+// var command = process.argv[2];
 var term = process.argv.slice(3).join(" ");
 
 //COMMAND LOGIC
+function runCommands(command) {
+    // console.log(command);
+    command = process.argv[2];
+    if (command === "concert-this") {
+    concertThis(term);
+    }   else if (command === "spotify-this-song") {
+        spotifyThis(term);
+    }   else if (command === "movie-this") {
+        movieThis(term);
+    }   else if (command === "do-what-it-says") {
+        debugger;
+        // console.log(command);
+        doWhatItSays(); 
+        debugger;
+        // return runCommands();
+    }
+};
+runCommands();
 
-if (command === "concert-this") {
-concertThis(term);
-}   else if (command === "spotify-this-song") {
-    spotifyThis(term);
-}   else if (command === "movie-this") {
-    movieThis(term);
-}   else if (command === "do-what-it-says") {
-    doWhatItSays();
-}
 
 function concertThis(artist) {
 
@@ -105,14 +113,12 @@ function movieThis(movie = 'Mr. Nobody') {
     // * Actors in the movie.
 };
 
-
 function doWhatItSays (command, term) {
     fs.readFile('random.txt', 'utf8', function(error, data){
         if (error) {
             return console.log(error);
         };
         var params = data.split(",");
-        console.log(params);
         command = params[0];
         term = params[1];
     });

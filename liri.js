@@ -10,9 +10,15 @@ var spotify = new Spotify(keys.spotify);
 var axios = require('axios');
 
 var command = process.argv[2];
-if (command==="concert-this") {
-    concertThis(process.argv[3]);
-};
+var term = process.argv.slice(3).join(" ");
+
+//COMMAND LOGIC
+
+if (command === "concert-this") {
+concertThis(term);
+}   else if (command === "spotify-this-song") {
+    spotifyThis(term);
+}
 
 function concertThis(artist) {
 
@@ -32,4 +38,24 @@ function concertThis(artist) {
     });
 };
 
-
+function spotifyThis(song = "The Sign") {
+    spotify.search({ type: 'track', query: song, limit: 10}, function(err, data) {
+        if (err) {
+          return console.log('Error occurred: ' + err);
+        }
+        // console.log(data.tracks.items);
+        var songResults = data.tracks.items;
+        // console.log(song);
+        console.log("Artists:" + "\n");
+        songResults.forEach(function(e){
+            // console.log(e.name);
+            
+            if(e.name === song) {
+                
+                e.artists.forEach(function(e){
+                    console.log(e.name);
+                });
+            };
+        });
+        });
+};

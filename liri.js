@@ -42,20 +42,22 @@ function spotifyThis(song = "The Sign") {
     spotify.search({ type: 'track', query: song, limit: 10}, function(err, data) {
         if (err) {
           return console.log('Error occurred: ' + err);
-        }
-        // console.log(data.tracks.items);
+        };
         var songResults = data.tracks.items;
-        // console.log(song);
-        console.log("Artists:" + "\n");
-        songResults.forEach(function(e){
-            // console.log(e.name);
-            
+        var albums = [];
+        var artists = [];
+        songResults.forEach(function(e){            
             if(e.name === song) {
-                
+                albums.push(e.album.name);
                 e.artists.forEach(function(e){
-                    console.log(e.name);
+                    // console.log(e);
+                    artists.push(e.name);
                 });
             };
         });
-        });
+        for (var i = 0; i<albums.length; i++) {
+            console.log("Artist: " + artists[i] + " Album: " + albums[i] + "\n");
+        };
+        // console.log("\n" + "Song name: " + song);
+    });
 };

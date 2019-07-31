@@ -3,6 +3,7 @@ require("dotenv").config();
 var keys = require("./keys.js");
 var Spotify = require('node-spotify-api');
 var moment = require('moment');
+var fs = require('file-system');
 
 var spotify = new Spotify(keys.spotify);
 // console.log(spotify);
@@ -20,6 +21,8 @@ concertThis(term);
     spotifyThis(term);
 }   else if (command === "movie-this") {
     movieThis(term);
+}   else if (command === "do-what-it-says") {
+    doWhatItSays(term);
 }
 
 function concertThis(artist) {
@@ -101,3 +104,7 @@ function movieThis(movie = 'Mr. Nobody') {
     // * Plot of the movie.
     // * Actors in the movie.
 };
+
+function doWhatItSays (command) {
+    fs.read;
+}
